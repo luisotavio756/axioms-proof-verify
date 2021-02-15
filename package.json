@@ -1,0 +1,21 @@
+{
+  "name": "Logic",
+  "private": true,
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "workspaces": {
+    "packages": [
+        "packages/*"
+    ]
+  },
+  "scripts": {
+    "dev:api": "cd packages/server && yarn dev:server"
+  },
+  "devDependencies": {
+    "@monorepo/eslint-config": "*",
+    "typescript": "^4.1.3"
+  },
+  "dependencies": {
+  }
+}
