@@ -95,8 +95,6 @@ export default class CheckerService {
             this.formulasRepository.create(formula);
         }
 
-        console.log(this.formulasRepository.findAll());
-
         return isTruthy;
     }
 }
