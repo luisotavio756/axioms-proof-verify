@@ -10,7 +10,8 @@
     ]
   },
   "scripts": {
-    "dev:api": "cd packages/server && yarn dev:server"
+    "dev:api": "cd packages/server && yarn dev:server",
+    "dev:client": "cd packages/frontend && yarn start"
   },
   "devDependencies": {
     "@monorepo/eslint-config": "*",
