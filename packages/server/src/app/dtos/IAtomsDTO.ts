@@ -1,5 +1,5 @@
 export default interface IAtoms {
-    p: string;
-    q: string;
-    r?: string;
+  p: string;
+  q: string;
+  r?: string;
 }

@@ -3,6 +3,6 @@ import { container } from 'tsyringe';
 import FormulasRepository from '../../app/repositories/FormulasRepository';
 
 container.registerSingleton<IFormulaRepository>(
-    'FormulasRepository',
-    FormulasRepository,
+  'FormulasRepository',
+  FormulasRepository,
 );
