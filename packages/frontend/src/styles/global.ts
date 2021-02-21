@@ -19,7 +19,7 @@ export default createGlobalStyle<IBodyProps>`
 
   body {
     transition: background 0.2s linear;
-    background:${({ theme }) => theme.background};
+    background: ${({ theme }) => theme.background};
     -webkit-font-smoothing: antialiased;
   }
 

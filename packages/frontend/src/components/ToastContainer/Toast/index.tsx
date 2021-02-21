@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import {
   FiAlertCircle,
   FiXCircle,
@@ -11,7 +11,7 @@ import { IToastMessage, useToast } from '../../../hooks/toast';
 
 interface IToastProps {
   toast: IToastMessage;
-  style: object;
+  style: any;
 }
 
 const icons = {
