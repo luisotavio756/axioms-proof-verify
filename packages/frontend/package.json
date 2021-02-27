@@ -19,6 +19,7 @@
     "react-icons": "^4.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
+    "react-select": "^4.1.0",
     "react-spring": "^8.0.27",
     "styled-components": "^5.2.1",
     "uuid": "^8.3.2",
@@ -44,6 +45,7 @@
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.7",
+    "@types/react-select": "^4.0.13",
     "@types/styled-components": "^5.1.7",
     "@types/uuid": "^8.3.0"
   }

@@ -76,6 +76,7 @@ const Main: React.FC = () => {
               number={item}
               removeItem={removeFormula}
               isLast={item === formulas.length}
+              totalFormulas={formulas.length}
             />
           ))}
       </div>
