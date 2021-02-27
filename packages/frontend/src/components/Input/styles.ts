@@ -51,7 +51,7 @@ export const Container = styled.div<IContainerProps>`
     flex: 1;
     background: transparent;
     border: none;
-    /* text-transform: uppercase; */
+    text-transform: uppercase;
 
     &::placeholder {
       color: #a8a8b3;

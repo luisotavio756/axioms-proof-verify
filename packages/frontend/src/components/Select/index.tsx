@@ -51,6 +51,7 @@ export default function Select({ name, ...rest }: Props) {
       return {
         ...provided,
         color: '#666360',
+        fontSize: '12px',
       };
     },
     singleValue: (provided, _state) => {

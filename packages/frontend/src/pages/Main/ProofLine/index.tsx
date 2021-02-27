@@ -14,6 +14,7 @@ import { useToast } from '../../../hooks/toast';
 import getValidationErrors from '../../../utils/getValidationErrors';
 import Axiom from './Axiom';
 import ModusPonens from './ModusPonens';
+import api from '../../../services/api';
 
 import { Container, Form } from './styles';
 
@@ -27,6 +28,17 @@ interface IProofLineProps {
 interface IMessage {
   type: 'error' | 'success';
   description: string;
+}
+
+interface IProofData {
+  formula: string;
+  type: string;
+  axiomType?: number;
+  p?: string;
+  q?: string;
+  r?: string;
+  formulaToMP1?: string;
+  formulaToMP2?: string;
 }
 
 const ProofLine: React.FC<IProofLineProps> = ({
@@ -60,10 +72,8 @@ const ProofLine: React.FC<IProofLineProps> = ({
   }, [selectedType, totalFormulas]);
 
   const handleSubmit = useCallback(
-    async (data: any) => {
+    async (data: IProofData) => {
       try {
-        console.log(data);
-
         formRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
@@ -81,6 +91,10 @@ const ProofLine: React.FC<IProofLineProps> = ({
             is: 'axiom',
             then: Yup.string().required('The proposal Q is required'),
           }),
+          r: Yup.string().when('axiomType', {
+            is: 2 || 8,
+            then: Yup.string().required('The proposal R is required'),
+          }),
           formulaToMP1: Yup.number().when('type', {
             is: 'modus_ponens',
             then: Yup.number().required(),
@@ -95,13 +109,48 @@ const ProofLine: React.FC<IProofLineProps> = ({
           abortEarly: false,
         });
 
-        setMessage({
-          type: 'success',
-          description: 'The proof is valid !',
-        });
-      } catch (error) {
-        console.log(error);
+        const {
+          formula,
+          type,
+          p,
+          q,
+          r,
+          axiomType,
+          formulaToMP1,
+          formulaToMP2,
+        } = data;
 
+        const parsedData = {
+          formula,
+          type,
+          ...(type === 'axiom'
+            ? {
+                axiomType,
+                atoms: {
+                  p,
+                  q,
+                  ...(axiomType === 2 || axiomType === 8 ? { r } : {}),
+                },
+              }
+            : {}),
+          ...(type === 'modus_ponens'
+            ? {
+                formulasToMP: [formulaToMP1, formulaToMP2],
+              }
+            : {}),
+        };
+
+        const response = await api.post('/resolver', parsedData);
+
+        if (response.data) {
+          setMessage({
+            type: 'success',
+            description: 'The proof is valid !',
+          });
+        } else {
+          throw Error();
+        }
+      } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error);
           formRef.current?.setErrors(errors);
@@ -121,9 +170,8 @@ const ProofLine: React.FC<IProofLineProps> = ({
 
         addToast({
           type: 'error',
-          title: 'Erro na recuperação de senha',
-          description:
-            'Ocorreu um erro ao tentar realizar a recuperação de senha, tente novamente',
+          title: 'Proof error',
+          description: 'Has a error in the proof line. Please, verify again.',
         });
       }
     },
@@ -148,9 +196,9 @@ const ProofLine: React.FC<IProofLineProps> = ({
       case 'proposition':
         return '2% 20% 7% 5% 2';
       case 'modus_ponens':
-        return '2% 20% 7% 8% 13% 13% 5% 2%';
+        return '2% 20% 7% 13% 13% 13% 5% 2%';
       case 'axiom':
-        return '2% 20% 7% 7% 12% 12% 12% 5% 2%';
+        return '2% 20% 7% 10% 12% 12% 12% 5% 2%';
       default:
         return '2% 20% 7% 2%';
     }
