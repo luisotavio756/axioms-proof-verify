@@ -18,7 +18,7 @@ const ModusPonens: React.FC<IModusPonensProps> = ({ totalFormulas }) => {
   return (
     <>
       <Select
-        name="formulasToMP[0]"
+        name="formulaToMP1"
         placeholder="Base Formula"
         options={options}
         onChange={(value, _i) => {
@@ -26,7 +26,7 @@ const ModusPonens: React.FC<IModusPonensProps> = ({ totalFormulas }) => {
         }}
       />
       <Select
-        name="formulasToMP[1]"
+        name="formulaToMP2"
         placeholder="To Compare Formula"
         options={options}
       />

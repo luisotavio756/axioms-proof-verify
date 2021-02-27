@@ -25,6 +25,7 @@ export const Container = styled.div`
       padding-left: 22px;
 
       li {
+        font-family: 'Fira Code';
         font-size: 16px;
         color: #999;
 

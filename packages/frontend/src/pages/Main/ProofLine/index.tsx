@@ -1,9 +1,12 @@
 import { FormHandles } from '@unform/core';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { FiArrowRight, FiCheckCircle, FiX } from 'react-icons/fi';
+import * as Yup from 'yup';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
 import Select from '../../../components/Select';
+import { useToast } from '../../../hooks/toast';
+import getValidationErrors from '../../../utils/getValidationErrors';
 import Axiom from './Axiom';
 import ModusPonens from './ModusPonens';
 
@@ -24,6 +27,7 @@ const ProofLine: React.FC<IProofLineProps> = ({
 }) => {
   const formRef = useRef<FormHandles>(null);
   const [selectedType, setSelectedType] = useState('');
+  const { addToast } = useToast();
 
   const addType = useCallback(selected => {
     const { value } = selected;
@@ -42,22 +46,39 @@ const ProofLine: React.FC<IProofLineProps> = ({
       default:
         return <></>;
     }
-  }, [selectedType]);
+  }, [selectedType, totalFormulas]);
 
   const handleSubmit = useCallback(
     async (data: any) => {
       try {
-        console.log(data, selectedType);
+        console.log(data);
 
-        // formRef.current?.setErrors({});
-        // const schema = Yup.object().shape({
-        //   email: Yup.string()
-        //     .required('Email obrigatório')
-        //     .email('Digite um email válido'),
-        // });
-        // await schema.validate(data, {
-        //   abortEarly: false,
-        // });
+        formRef.current?.setErrors({});
+
+        const schema = Yup.object().shape({
+          formula: Yup.string().required('Formula is required'),
+          'proof-type': Yup.string().required('Proof Type is required'),
+          p: Yup.string().when('proof-type', {
+            is: 'axiom',
+            then: Yup.string().required('The proposal P is required'),
+          }),
+          q: Yup.string().when('proof-type', {
+            is: 'axiom',
+            then: Yup.string().required('The proposal Q is required'),
+          }),
+          formulaToMP1: Yup.number().when('proof-type', {
+            is: 'modus_ponens',
+            then: Yup.number().required(),
+          }),
+          formulaToMP2: Yup.number().when('proof-type', {
+            is: 'modus_ponens',
+            then: Yup.number().required(),
+          }),
+        });
+
+        await schema.validate(data, {
+          abortEarly: false,
+        });
         // await api.post('/password/forgot', {
         //   email: data.email,
         // });
@@ -69,21 +90,36 @@ const ProofLine: React.FC<IProofLineProps> = ({
         // });
         // history.push('/dashboard');
       } catch (error) {
-        // if (error instanceof Yup.ValidationError) {
-        //   const errors = getValidationErrors(error);
-        //   formRef.current?.setErrors(errors);
-        //   return;
-        // }
-        // addToast({
-        //   type: 'error',
-        //   title: 'Erro na recuperação de senha',
-        //   description:
-        //     'Ocorreu um erro ao tentar realizar a recuperação de senha, tente novamente',
-        // });
+        if (error instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(error);
+          console.log(errors);
+          formRef.current?.setErrors(errors);
+          return;
+        }
+
+        addToast({
+          type: 'error',
+          title: 'Erro na recuperação de senha',
+          description:
+            'Ocorreu um erro ao tentar realizar a recuperação de senha, tente novamente',
+        });
       }
     },
-    [selectedType],
+    [addToast],
   );
+
+  const typeOptions = useMemo(() => {
+    const options = [
+      { value: 'proposition', label: 'Proposition' },
+      { value: 'axiom', label: 'Axiom' },
+    ];
+
+    if (totalFormulas > 2) {
+      options.push({ value: 'modus_ponens', label: 'M.P' });
+    }
+
+    return options;
+  }, [totalFormulas]);
 
   return (
     <Form ref={formRef} onSubmit={handleSubmit}>
@@ -98,11 +134,7 @@ const ProofLine: React.FC<IProofLineProps> = ({
         <Input icon={FiArrowRight} name="formula" />
         <Select
           name="proof-type"
-          options={[
-            { value: 'proposition', label: 'Proposition' },
-            { value: 'axiom', label: 'Axiom' },
-            { value: 'modus_ponens', label: 'M.P' },
-          ]}
+          options={typeOptions}
           onChange={addType}
           placeholder="Type"
         />

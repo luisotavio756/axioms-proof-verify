@@ -25,6 +25,26 @@ export default function Select({ name, ...rest }: Props) {
         borderRadius: '10px',
         fontFamily: 'Fira Code',
         fontSize: '12px',
+        borderWidth: '2px',
+        // eslint-disable-next-line
+        borderColor: error
+          ? '#c53030 !important'
+          : _state.hasValue
+          ? '#8bb03e !important'
+          : '#fff !important',
+        boxShadow: 'none',
+      };
+    },
+    indicatorSeparator: (provided, _state) => {
+      return {
+        ...provided,
+        backgroundColor: error ? '#c53030' : 'inherit',
+      };
+    },
+    dropdownIndicator: (provided, _state) => {
+      return {
+        ...provided,
+        color: error ? '#c53030' : 'inherit',
       };
     },
     option: (provided, _state) => {
@@ -37,6 +57,12 @@ export default function Select({ name, ...rest }: Props) {
       return {
         ...provided,
         color: '#666360',
+      };
+    },
+    placeholder: (provided, _state) => {
+      return {
+        ...provided,
+        color: error ? '#c53030' : '#666360',
       };
     },
   };
@@ -58,7 +84,7 @@ export default function Select({ name, ...rest }: Props) {
         return ref.state.value.value;
       },
     });
-  }, [fieldName, registerField, rest.isMulti]);
+  }, [fieldName, registerField, rest.isMulti, error]);
 
   return (
     <ReactSelect
