@@ -1,14 +1,58 @@
 import styled from 'styled-components';
 import { shade } from 'polished';
-import { Form as Unform } from '@unform/web';
 
 export const Container = styled.div`
-  max-width: 700px;
+  max-width: 1500px;
   display: flex;
   flex-direction: column;
   margin: 0 auto;
   padding: 40px 20px;
   position: relative;
+
+  .container-title {
+    margin: 0 auto;
+    max-width: 700px;
+    position: relative;
+  }
+
+  .description {
+    p {
+      color: #fff;
+      font-size: 18px;
+    }
+
+    ul {
+      padding-left: 22px;
+
+      li {
+        font-size: 16px;
+        color: #999;
+
+        span {
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  .button-actions {
+    border-top: 1px solid ${shade('0.6', '#eee')};
+    margin-top: 32px;
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-column-gap: 16px;
+
+    button:first-of-type {
+      grid-column-start: 2;
+      color: #fff;
+      background-color: #f64e60;
+
+      &:hover {
+        background-color: ${shade('0.2', '#f64e60')};
+      }
+    }
+  }
 
   img {
     width: 180px;
@@ -58,25 +102,4 @@ export const Title = styled.h1`
 
   max-width: 580px;
   margin: 56px 0 24px;
-`;
-
-export const Form = styled(Unform)`
-  display: flex;
-
-  .submit-button {
-    margin-top: 0;
-    margin-left: 8px;
-    width: 100%;
-    width: 200px;
-  }
-
-  @media screen and (max-width: 790px) {
-    flex-direction: column;
-
-    .submit-button {
-      margin-top: 16px;
-      margin-left: 0px;
-      width: 100%;
-    }
-  }
 `;

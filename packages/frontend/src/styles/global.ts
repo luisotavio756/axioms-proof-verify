@@ -27,6 +27,10 @@ export default createGlobalStyle<IBodyProps>`
     font-family: 'Poppins', sans-serif;
   }
 
+  input, select {
+    font-family: 'Fira Code', monospace;
+  }
+
   h1, h2, h3, h4, h5, h6, strong {
     transition: color 0.2s linear;
     color: ${({ theme }) => theme.title};

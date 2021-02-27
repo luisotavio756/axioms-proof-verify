@@ -15,12 +15,14 @@ export const Container = styled.div<IContainerProps>`
   color: #666360;
   display: flex;
   align-items: center;
+  height: 56px;
 
   & + div {
     margin-top: 8px;
   }
 
-  svg {
+  svg,
+  span {
     margin-right: 16px;
   }
 
@@ -49,6 +51,7 @@ export const Container = styled.div<IContainerProps>`
     flex: 1;
     background: transparent;
     border: none;
+    /* text-transform: uppercase; */
 
     &::placeholder {
       color: #a8a8b3;
