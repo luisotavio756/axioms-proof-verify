@@ -13,7 +13,7 @@ const Axiom: React.FC = () => {
   return (
     <>
       <Select
-        name="axiom_type"
+        name="axiomType"
         isSearchable={false}
         options={options}
         placeholder="Axiom Type"

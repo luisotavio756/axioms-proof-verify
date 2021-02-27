@@ -68,20 +68,24 @@ const ProofLine: React.FC<IProofLineProps> = ({
 
         const schema = Yup.object().shape({
           formula: Yup.string().required('Formula is required'),
-          'proof-type': Yup.string().required('Proof Type is required'),
-          p: Yup.string().when('proof-type', {
+          type: Yup.string().required('Proof Type is required'),
+          axiomType: Yup.number().when('type', {
+            is: 'axiom',
+            then: Yup.number().required('The axiom type is required'),
+          }),
+          p: Yup.string().when('type', {
             is: 'axiom',
             then: Yup.string().required('The proposal P is required'),
           }),
-          q: Yup.string().when('proof-type', {
+          q: Yup.string().when('type', {
             is: 'axiom',
             then: Yup.string().required('The proposal Q is required'),
           }),
-          formulaToMP1: Yup.number().when('proof-type', {
+          formulaToMP1: Yup.number().when('type', {
             is: 'modus_ponens',
             then: Yup.number().required(),
           }),
-          formulaToMP2: Yup.number().when('proof-type', {
+          formulaToMP2: Yup.number().when('type', {
             is: 'modus_ponens',
             then: Yup.number().required(),
           }),
@@ -96,6 +100,8 @@ const ProofLine: React.FC<IProofLineProps> = ({
           description: 'The proof is valid !',
         });
       } catch (error) {
+        console.log(error);
+
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error);
           formRef.current?.setErrors(errors);
@@ -162,7 +168,7 @@ const ProofLine: React.FC<IProofLineProps> = ({
         </div>
         <Input icon={FiArrowRight} name="formula" />
         <Select
-          name="proof-type"
+          name="type"
           options={typeOptions}
           onChange={addType}
           placeholder="Type"
