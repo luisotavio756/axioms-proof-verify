@@ -1,6 +1,11 @@
 import { FormHandles } from '@unform/core';
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { FiArrowRight, FiCheckCircle, FiX } from 'react-icons/fi';
+import {
+  FiAlertCircle,
+  FiArrowRight,
+  FiCheckCircle,
+  FiX,
+} from 'react-icons/fi';
 import * as Yup from 'yup';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
@@ -19,6 +24,11 @@ interface IProofLineProps {
   totalFormulas: number;
 }
 
+interface IMessage {
+  type: 'error' | 'success';
+  description: string;
+}
+
 const ProofLine: React.FC<IProofLineProps> = ({
   number,
   isLast,
@@ -28,6 +38,7 @@ const ProofLine: React.FC<IProofLineProps> = ({
   const formRef = useRef<FormHandles>(null);
   const [selectedType, setSelectedType] = useState('');
   const { addToast } = useToast();
+  const [message, setMessage] = useState<IMessage>({} as IMessage);
 
   const addType = useCallback(selected => {
     const { value } = selected;
@@ -79,23 +90,28 @@ const ProofLine: React.FC<IProofLineProps> = ({
         await schema.validate(data, {
           abortEarly: false,
         });
-        // await api.post('/password/forgot', {
-        //   email: data.email,
-        // });
-        // addToast({
-        //   type: 'success',
-        //   title: 'E-mail de recuperação enviado',
-        //   description:
-        //     'Enviamos um e-mail para confirmar a recuperação de senha, cheque sua caixa de entrada',
-        // });
-        // history.push('/dashboard');
+
+        setMessage({
+          type: 'success',
+          description: 'The proof is valid !',
+        });
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error);
-          console.log(errors);
           formRef.current?.setErrors(errors);
+
+          setMessage({
+            type: 'error',
+            description: 'Please, verify the fields !',
+          });
+
           return;
         }
+
+        setMessage({
+          type: 'error',
+          description: 'The proof is not valid !',
+        });
 
         addToast({
           type: 'error',
@@ -167,6 +183,12 @@ const ProofLine: React.FC<IProofLineProps> = ({
             </button>
           )}
         </div>
+        {Object.keys(message).length > 0 && (
+          <p className={message.type}>
+            {message.description}{' '}
+            {message.type === 'success' ? <FiCheckCircle /> : <FiAlertCircle />}
+          </p>
+        )}
       </Container>
     </Form>
   );

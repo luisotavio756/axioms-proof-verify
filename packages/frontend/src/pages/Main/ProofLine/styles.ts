@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Form as Unform } from '@unform/web';
 
 export const Container = styled.div`
-  margin-top: 24px;
+  margin-top: 16px;
 
   display: grid;
   grid-column-gap: 0.4%;
@@ -58,6 +58,28 @@ export const Container = styled.div`
           color: #f64e60;
         }
       }
+    }
+  }
+
+  > p {
+    margin-top: 6px;
+    margin-bottom: 0;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    grid-column-start: 1;
+    grid-column-end: 5;
+    color: #8bb03e;
+
+    display: flex;
+    align-items: center;
+
+    &.error {
+      color: #f64e60;
+    }
+
+    svg {
+      margin-left: 4px;
     }
   }
 `;
