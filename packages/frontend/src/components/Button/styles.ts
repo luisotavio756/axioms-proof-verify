@@ -24,4 +24,9 @@ export const Container = styled.button`
   &:hover {
     background: ${shade(0.2, '#8bb03e')};
   }
+
+  &:disabled {
+    background: ${shade(0.4, '#8bb03e')};
+    cursor: not-allowed;
+  }
 `;

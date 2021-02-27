@@ -1,48 +1,13 @@
 import { FiMoon, FiPlus, FiSun, FiTrash } from 'react-icons/fi';
-import { useCallback, useState } from 'react';
 import { Title, Container } from './styles';
 import Button from '../../components/Button';
 import { useTheme } from '../../hooks/theme';
 import ProofLine from './ProofLine';
-import api from '../../services/api';
-import { useToast } from '../../hooks/toast';
+import { useFormulas } from '../../hooks/formulas';
 
 const Main: React.FC = () => {
   const { toggleTheme, theme } = useTheme();
-  const [formulas, setFormulas] = useState<number[]>([]);
-  const { addToast } = useToast();
-
-  const incrementFormulas = useCallback(() => {
-    setFormulas(state => {
-      if (state.length) {
-        const lastFormula = state[state.length - 1];
-
-        return [...state, lastFormula + 1];
-      }
-
-      return [1];
-    });
-  }, []);
-
-  const removeFormula = useCallback(() => {
-    setFormulas(state => {
-      return state.filter(item => item !== state.length);
-    });
-  }, []);
-
-  const clearFormulas = useCallback(async () => {
-    try {
-      await api.get('/formulas/clear');
-
-      setFormulas([]);
-    } catch (error) {
-      addToast({
-        type: 'error',
-        title: 'Error',
-        description: 'Happen a error when try clear proofs',
-      });
-    }
-  }, [addToast]);
+  const { formulas, clearFormulas, incrementFormulas } = useFormulas();
 
   return (
     <Container data-testid="container">
@@ -85,13 +50,7 @@ const Main: React.FC = () => {
       <div className="formulas">
         {formulas.length > 0 &&
           formulas.map(item => (
-            <ProofLine
-              key={item}
-              number={item}
-              removeItem={removeFormula}
-              isLast={item === formulas.length}
-              totalFormulas={formulas.length}
-            />
+            <ProofLine key={item.position} position={item.position} />
           ))}
       </div>
       <div className="button-actions">

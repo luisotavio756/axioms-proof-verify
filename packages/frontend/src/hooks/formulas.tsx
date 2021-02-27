@@ -70,7 +70,7 @@ const FormulasProvider: React.FC = ({ children }) => {
   }, [addToast]);
 
   const lastFormulaIsTruthy = useMemo(
-    () => formulas[formulas.length - 1].isTruthy,
+    () => formulas.length > 0 && formulas[formulas.length - 1].isTruthy,
     [formulas],
   );
 

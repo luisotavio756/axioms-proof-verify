@@ -1,19 +1,17 @@
 import { useMemo, useState } from 'react';
 import Select from '../../../../components/Select';
+import { useFormulas } from '../../../../hooks/formulas';
 
-interface IModusPonensProps {
-  totalFormulas: number;
-}
-
-const ModusPonens: React.FC<IModusPonensProps> = ({ totalFormulas }) => {
+const ModusPonens: React.FC = () => {
   const [baseFormula, setBaseFormula] = useState(0);
+  const { formulas } = useFormulas();
 
   const options = useMemo(() => {
-    return Array.from({ length: totalFormulas - 1 }, (_i, index) => ({
+    return Array.from({ length: formulas.length - 1 }, (_i, index) => ({
       label: index + 1,
       value: index + 1,
     })).filter(item => item.value !== baseFormula);
-  }, [totalFormulas, baseFormula]);
+  }, [formulas, baseFormula]);
 
   return (
     <>

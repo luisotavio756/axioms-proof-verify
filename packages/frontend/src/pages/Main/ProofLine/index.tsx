@@ -17,12 +17,10 @@ import ModusPonens from './ModusPonens';
 import api from '../../../services/api';
 
 import { Container, Form } from './styles';
+import { useFormulas } from '../../../hooks/formulas';
 
 interface IProofLineProps {
-  number: number;
-  removeItem(): void;
-  isLast: boolean;
-  totalFormulas: number;
+  position: number;
 }
 
 interface IMessage {
@@ -41,16 +39,16 @@ interface IProofData {
   formulaToMP2?: string;
 }
 
-const ProofLine: React.FC<IProofLineProps> = ({
-  number,
-  isLast,
-  totalFormulas,
-  removeItem,
-}) => {
+const ProofLine: React.FC<IProofLineProps> = ({ position }) => {
   const formRef = useRef<FormHandles>(null);
   const [selectedType, setSelectedType] = useState('');
   const { addToast } = useToast();
+  const { formulas, removeFormula, updateProof } = useFormulas();
   const [message, setMessage] = useState<IMessage>({} as IMessage);
+
+  const isLast = useMemo(() => {
+    return position === formulas.length;
+  }, [position, formulas]);
 
   const addType = useCallback(selected => {
     const { value } = selected;
@@ -63,13 +61,13 @@ const ProofLine: React.FC<IProofLineProps> = ({
       case 'proposition':
         return <></>;
       case 'modus_ponens':
-        return <ModusPonens totalFormulas={totalFormulas} />;
+        return <ModusPonens />;
       case 'axiom':
         return <Axiom />;
       default:
         return <></>;
     }
-  }, [selectedType, totalFormulas]);
+  }, [selectedType]);
 
   const handleSubmit = useCallback(
     async (data: IProofData) => {
@@ -147,6 +145,8 @@ const ProofLine: React.FC<IProofLineProps> = ({
             type: 'success',
             description: 'The proof is valid !',
           });
+
+          updateProof(position, true);
         } else {
           throw Error();
         }
@@ -175,7 +175,7 @@ const ProofLine: React.FC<IProofLineProps> = ({
         });
       }
     },
-    [addToast],
+    [addToast, updateProof, position],
   );
 
   const typeOptions = useMemo(() => {
@@ -184,12 +184,12 @@ const ProofLine: React.FC<IProofLineProps> = ({
       { value: 'axiom', label: 'Axiom' },
     ];
 
-    if (totalFormulas > 2 && number === totalFormulas) {
+    if (formulas.length > 2 && position === formulas.length) {
       options.push({ value: 'modus_ponens', label: 'M.P' });
     }
 
     return options;
-  }, [totalFormulas, number]);
+  }, [formulas, position]);
 
   const gridTemplateColumns = useMemo(() => {
     switch (selectedType) {
@@ -204,6 +204,12 @@ const ProofLine: React.FC<IProofLineProps> = ({
     }
   }, [selectedType]);
 
+  console.log(
+    formulas.length > 1,
+    !formulas[position - 2]?.isTruthy,
+    position !== 1,
+  );
+
   return (
     <Form ref={formRef} onSubmit={handleSubmit}>
       <Container
@@ -212,7 +218,7 @@ const ProofLine: React.FC<IProofLineProps> = ({
         }}
       >
         <div className="number-of-count">
-          <span>{number}:</span>
+          <span>{position}:</span>
         </div>
         <Input icon={FiArrowRight} name="formula" />
         <Select
@@ -224,14 +230,22 @@ const ProofLine: React.FC<IProofLineProps> = ({
         />
         {renderType()}
         <div className="actions">
-          <Button type="submit" className="check-button">
+          <Button
+            type="submit"
+            className="check-button"
+            disabled={
+              formulas.length > 1 &&
+              !formulas[position - 2]?.isTruthy &&
+              position !== 1
+            }
+          >
             <FiCheckCircle /> Check
           </Button>
           {isLast && (
             <button
               type="button"
               className="remove-button"
-              onClick={() => removeItem()}
+              onClick={() => removeFormula()}
             >
               <FiX />
             </button>
