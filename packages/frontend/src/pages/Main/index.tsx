@@ -4,10 +4,13 @@ import { Title, Container } from './styles';
 import Button from '../../components/Button';
 import { useTheme } from '../../hooks/theme';
 import ProofLine from './ProofLine';
+import api from '../../services/api';
+import { useToast } from '../../hooks/toast';
 
 const Main: React.FC = () => {
   const { toggleTheme, theme } = useTheme();
   const [formulas, setFormulas] = useState<number[]>([]);
+  const { addToast } = useToast();
 
   const incrementFormulas = useCallback(() => {
     setFormulas(state => {
@@ -27,9 +30,19 @@ const Main: React.FC = () => {
     });
   }, []);
 
-  const clearFormulas = useCallback(() => {
-    setFormulas([]);
-  }, []);
+  const clearFormulas = useCallback(async () => {
+    try {
+      await api.get('/formulas/clear');
+
+      setFormulas([]);
+    } catch (error) {
+      addToast({
+        type: 'error',
+        title: 'Error',
+        description: 'Happen a error when try clear proofs',
+      });
+    }
+  }, [addToast]);
 
   return (
     <Container data-testid="container">
@@ -67,6 +80,7 @@ const Main: React.FC = () => {
             Disjunction: <span>v</span>
           </li>
         </ul>
+        <p>OBS: Please, use one tab space</p>
       </div>
       <div className="formulas">
         {formulas.length > 0 &&
