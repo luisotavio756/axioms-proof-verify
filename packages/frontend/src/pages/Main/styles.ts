@@ -2,11 +2,12 @@ import styled from 'styled-components';
 import { shade } from 'polished';
 
 export const Container = styled.div`
-  max-width: 1500px;
+  /* max-width: 1400px; */
+  /* width: 100%; */
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
-  padding: 40px 20px;
+  /* margin: 0 auto; */
+  padding: 40px 0 40px 40px;
   position: relative;
 
   .container-title {
@@ -34,6 +35,10 @@ export const Container = styled.div`
         }
       }
     }
+  }
+
+  .formulas {
+    /* width: 100%; */
   }
 
   .button-actions {

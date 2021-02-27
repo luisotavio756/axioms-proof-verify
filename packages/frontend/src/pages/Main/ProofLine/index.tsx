@@ -121,11 +121,24 @@ const ProofLine: React.FC<IProofLineProps> = ({
     return options;
   }, [totalFormulas, number]);
 
+  const gridTemplateColumns = useMemo(() => {
+    switch (selectedType) {
+      case 'proposition':
+        return '2% 20% 7% 5% 2';
+      case 'modus_ponens':
+        return '2% 20% 7% 8% 13% 13% 5% 2%';
+      case 'axiom':
+        return '2% 20% 7% 7% 12% 12% 12% 5% 2%';
+      default:
+        return '2% 20% 7% 2%';
+    }
+  }, [selectedType]);
+
   return (
     <Form ref={formRef} onSubmit={handleSubmit}>
       <Container
         style={{
-          gridTemplateColumns: '2% 26% 10% 15% 15% 15% 15% 2%',
+          gridTemplateColumns,
         }}
       >
         <div className="number-of-count">
@@ -137,6 +150,7 @@ const ProofLine: React.FC<IProofLineProps> = ({
           options={typeOptions}
           onChange={addType}
           placeholder="Type"
+          isSearchable={false}
         />
         {renderType()}
         <div className="actions">

@@ -24,11 +24,13 @@ const ModusPonens: React.FC<IModusPonensProps> = ({ totalFormulas }) => {
         onChange={(value, _i) => {
           setBaseFormula(value?.value);
         }}
+        isSearchable={false}
       />
       <Select
         name="formulaToMP2"
         placeholder="To Compare Formula"
         options={options}
+        isSearchable={false}
       />
     </>
   );
