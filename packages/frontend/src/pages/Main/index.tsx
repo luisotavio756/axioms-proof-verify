@@ -52,7 +52,7 @@ const Main: React.FC = () => {
         <Title>Axioms Proof Checker</Title>
       </div>
       <div className="description">
-        <p>Alphabetic:</p>
+        <h4>Alphabetic:</h4>
         <ul>
           <li>
             Implication: <span>{'->'}</span>

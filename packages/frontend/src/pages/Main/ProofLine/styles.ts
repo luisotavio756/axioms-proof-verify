@@ -17,7 +17,6 @@ export const Container = styled.div`
 
     span {
       font-size: 22px;
-      color: #fff;
     }
   }
 
@@ -50,7 +49,7 @@ export const Container = styled.div`
       svg {
         transition: all 0.2s linear;
         font-size: 32px;
-        color: #fff;
+        color: ${({ theme }) => theme.title};
       }
 
       &:hover {

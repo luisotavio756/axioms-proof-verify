@@ -17,8 +17,8 @@ export const Container = styled.div`
   }
 
   .description {
-    p {
-      color: #fff;
+    h4 {
+      /* color: ${({ theme }) => theme.title}; */
       font-size: 18px;
     }
 
@@ -28,11 +28,7 @@ export const Container = styled.div`
       li {
         font-family: 'Fira Code';
         font-size: 16px;
-        color: #999;
-
-        span {
-          color: #fff;
-        }
+        color: ${({ theme }) => theme.text};
       }
     }
   }
