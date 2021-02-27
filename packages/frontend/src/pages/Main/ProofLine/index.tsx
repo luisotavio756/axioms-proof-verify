@@ -114,12 +114,12 @@ const ProofLine: React.FC<IProofLineProps> = ({
       { value: 'axiom', label: 'Axiom' },
     ];
 
-    if (totalFormulas > 2) {
+    if (totalFormulas > 2 && number === totalFormulas) {
       options.push({ value: 'modus_ponens', label: 'M.P' });
     }
 
     return options;
-  }, [totalFormulas]);
+  }, [totalFormulas, number]);
 
   return (
     <Form ref={formRef} onSubmit={handleSubmit}>
