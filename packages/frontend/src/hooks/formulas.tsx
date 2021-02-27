@@ -5,6 +5,8 @@ import {
   useContext,
   useMemo,
 } from 'react';
+import api from '../services/api';
+import { useToast } from './toast';
 
 interface IFormula {
   position: number;
@@ -13,9 +15,11 @@ interface IFormula {
 
 interface IFormulasContextData {
   formulas: IFormula[];
+  lastFormulaIsTruthy: boolean;
   incrementFormulas(): void;
   updateProof(position: number, isTruthy: boolean): void;
-  lastFormulaIsTruthy: boolean;
+  removeFormula(): void;
+  clearFormulas(): Promise<void>;
 }
 
 const FormulasContext = createContext({} as IFormulasContextData);
@@ -35,6 +39,12 @@ const FormulasProvider: React.FC = ({ children }) => {
     });
   }, []);
 
+  const removeFormula = useCallback(() => {
+    setFormulas(state => {
+      return state.filter(item => item.position !== state.length);
+    });
+  }, []);
+
   const updateProof = useCallback((position: number, isTruthy: boolean) => {
     setFormulas(state => {
       return state.map(item =>
@@ -43,6 +53,22 @@ const FormulasProvider: React.FC = ({ children }) => {
     });
   }, []);
 
+  const { addToast } = useToast();
+
+  const clearFormulas = useCallback(async () => {
+    try {
+      await api.get('/formulas/clear');
+
+      setFormulas([]);
+    } catch (error) {
+      addToast({
+        type: 'error',
+        title: 'Error',
+        description: 'Happen a error when try clear proofs',
+      });
+    }
+  }, [addToast]);
+
   const lastFormulaIsTruthy = useMemo(
     () => formulas[formulas.length - 1].isTruthy,
     [formulas],
@@ -50,7 +76,14 @@ const FormulasProvider: React.FC = ({ children }) => {
 
   return (
     <FormulasContext.Provider
-      value={{ formulas, incrementFormulas, updateProof, lastFormulaIsTruthy }}
+      value={{
+        formulas,
+        lastFormulaIsTruthy,
+        incrementFormulas,
+        updateProof,
+        removeFormula,
+        clearFormulas,
+      }}
     >
       {children}
     </FormulasContext.Provider>
