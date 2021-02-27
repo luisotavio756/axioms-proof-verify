@@ -3,14 +3,14 @@ import { injectable, inject } from 'tsyringe';
 
 @injectable()
 class ClearFormulasService {
-    constructor(
-        @inject('FormulasRepository')
-        private formulasRepository: IFormulaRepository,
-    ) {}
+  constructor(
+    @inject('FormulasRepository')
+    private formulasRepository: IFormulaRepository,
+  ) {}
 
-    public execute(): void {
-        this.formulasRepository.clearRepository();
-    }
+  public execute(): void {
+    this.formulasRepository.clearRepository();
+  }
 }
 
 export default ClearFormulasService;
