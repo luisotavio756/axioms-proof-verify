@@ -28,6 +28,12 @@ export default class CheckerService {
   }: IRequest): boolean {
     let isTruthy = false;
 
+    const formulasList = this.formulasRepository.findAll();
+
+    if (formulasList.indexOf(formula) > -1) {
+      return true;
+    }
+
     switch (type) {
       case 'axiom':
         if (atoms && axiomType) {
