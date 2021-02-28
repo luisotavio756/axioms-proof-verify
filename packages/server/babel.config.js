@@ -1,17 +1,17 @@
 module.exports = {
-    presets: [
-        ['@babel/preset-env', { targets: { node: 'current' } }],
-        '@babel/preset-typescript',
+  presets: [
+    ['@babel/preset-env', { targets: { node: 'current' } }],
+    '@babel/preset-typescript',
+  ],
+  plugins: [
+    [
+      'module-resolver',
+      {
+        alias: {
+          '@app': './src/app',
+          '@shared': './src/shared',
+        },
+      },
     ],
-    plugins: [
-        [
-            'module-resolver',
-            {
-                alias: {
-                    '@app': './src/app',
-                    '@shared': './src/shared',
-                },
-            },
-        ],
-    ],
+  ],
 };
