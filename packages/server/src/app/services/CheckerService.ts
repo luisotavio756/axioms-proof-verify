@@ -28,16 +28,6 @@ export default class CheckerService {
   }: IRequest): boolean {
     let isTruthy = false;
 
-    const formulasList = this.formulasRepository.findAll();
-
-    const formulaIndex = formulasList.indexOf(formula);
-
-    if (formulaIndex > -1) {
-      console.log('existe');
-
-      this.formulasRepository.destroy(formulaIndex);
-    }
-
     switch (type) {
       case 'axiom':
         if (atoms && axiomType) {
@@ -87,8 +77,14 @@ export default class CheckerService {
         break;
     }
 
-    if (isTruthy) {
+    const formulasList = this.formulasRepository.findAll();
+
+    const formulaIndex = formulasList.indexOf(formula);
+
+    if (isTruthy && formulaIndex === -1) {
       this.formulasRepository.create(formula);
+    } else if (isTruthy && formulaIndex > -1) {
+      this.formulasRepository.update(formulaIndex, formula);
     }
 
     console.log(this.formulasRepository.findAll());

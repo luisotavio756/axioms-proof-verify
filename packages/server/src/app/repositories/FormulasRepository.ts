@@ -19,6 +19,12 @@ class FormulasRepository implements IFormulaRepository {
     return findFormula;
   }
 
+  public update(index: number, formula: string): string {
+    this.formulas[index] = formula;
+
+    return this.formulas[index];
+  }
+
   public clearRepository(): void {
     this.formulas = [];
   }
