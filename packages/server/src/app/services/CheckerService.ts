@@ -30,8 +30,12 @@ export default class CheckerService {
 
     const formulasList = this.formulasRepository.findAll();
 
-    if (formulasList.indexOf(formula) > -1) {
-      return true;
+    const formulaIndex = formulasList.indexOf(formula);
+
+    if (formulaIndex > -1) {
+      console.log('existe');
+
+      this.formulasRepository.destroy(formulaIndex);
     }
 
     switch (type) {
@@ -86,6 +90,8 @@ export default class CheckerService {
     if (isTruthy) {
       this.formulasRepository.create(formula);
     }
+
+    console.log(this.formulasRepository.findAll());
 
     return isTruthy;
   }

@@ -22,6 +22,10 @@ class FormulasRepository implements IFormulaRepository {
   public clearRepository(): void {
     this.formulas = [];
   }
+
+  public destroy(index: number): void {
+    this.formulas.splice(index, 1);
+  }
 }
 
 export default FormulasRepository;

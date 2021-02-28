@@ -3,4 +3,5 @@ export default interface IFormulaRepository {
   findAll(): Array<string>;
   findByIndex(index: number): string | undefined;
   clearRepository(): void;
+  destroy(index: number): void;
 }

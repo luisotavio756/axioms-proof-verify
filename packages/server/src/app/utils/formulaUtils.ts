@@ -123,6 +123,13 @@ export default {
   verifyModusPonens(baseFormula: string, toCompareFormula: string): boolean {
     let isValid = true;
 
+    if (
+      !baseFormula.includes(toCompareFormula) ||
+      !baseFormula.includes('->')
+    ) {
+      return false;
+    }
+
     toCompareFormula.split('').forEach((char, i) => {
       if (char !== baseFormula[i]) {
         isValid = false;
@@ -133,13 +140,14 @@ export default {
       return isValid;
     }
 
-    const regexExp = /\(*[A-Z]\)* -> [(¬A-Z]/g;
+    const regexExp = /\(*[A-Z]\)*/g;
 
     const parsedBaseFormula = baseFormula
       .replace(`${toCompareFormula}`, '')
-      .trim();
+      .trim()
+      .split('->');
 
-    if (!regexExp.test(parsedBaseFormula)) {
+    if (!regexExp.test(parsedBaseFormula[0])) {
       isValid = true;
     }
 
