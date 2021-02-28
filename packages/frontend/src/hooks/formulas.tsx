@@ -11,13 +11,14 @@ import { useToast } from './toast';
 interface IFormula {
   position: number;
   isTruthy: boolean;
+  isChecked: boolean;
 }
 
 interface IFormulasContextData {
   formulas: IFormula[];
   lastFormulaIsTruthy: boolean;
   incrementFormulas(): void;
-  updateProof(position: number, isTruthy: boolean): void;
+  updateProof(data: IFormula): void;
   removeFormula(): void;
   clearFormulas(): Promise<void>;
 }
@@ -32,10 +33,13 @@ const FormulasProvider: React.FC = ({ children }) => {
       if (state.length) {
         const lastFormula = state[state.length - 1].position;
 
-        return [...state, { position: lastFormula + 1, isTruthy: false }];
+        return [
+          ...state,
+          { position: lastFormula + 1, isTruthy: false, isChecked: false },
+        ];
       }
 
-      return [{ position: 1, isTruthy: false }];
+      return [{ position: 1, isTruthy: false, isChecked: false }];
     });
   }, []);
 
@@ -45,13 +49,16 @@ const FormulasProvider: React.FC = ({ children }) => {
     });
   }, []);
 
-  const updateProof = useCallback((position: number, isTruthy: boolean) => {
-    setFormulas(state => {
-      return state.map(item =>
-        item.position === position ? { position, isTruthy } : item,
-      );
-    });
-  }, []);
+  const updateProof = useCallback(
+    ({ position, isChecked, isTruthy }: IFormula) => {
+      setFormulas(state => {
+        return state.map(item =>
+          item.position === position ? { position, isTruthy, isChecked } : item,
+        );
+      });
+    },
+    [],
+  );
 
   const { addToast } = useToast();
 

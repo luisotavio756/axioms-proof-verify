@@ -146,8 +146,18 @@ const ProofLine: React.FC<IProofLineProps> = ({ position }) => {
             description: 'The proof is valid !',
           });
 
-          updateProof(position, true);
+          updateProof({
+            position,
+            isTruthy: true,
+            isChecked: true,
+          });
         } else {
+          updateProof({
+            position,
+            isTruthy: false,
+            isChecked: true,
+          });
+
           throw Error();
         }
       } catch (error) {
@@ -204,12 +214,6 @@ const ProofLine: React.FC<IProofLineProps> = ({ position }) => {
     }
   }, [selectedType]);
 
-  console.log(
-    formulas.length > 1,
-    !formulas[position - 2]?.isTruthy,
-    position !== 1,
-  );
-
   return (
     <Form ref={formRef} onSubmit={handleSubmit}>
       <Container
@@ -230,17 +234,20 @@ const ProofLine: React.FC<IProofLineProps> = ({ position }) => {
         />
         {renderType()}
         <div className="actions">
-          <Button
-            type="submit"
-            className="check-button"
-            disabled={
-              formulas.length > 1 &&
-              !formulas[position - 2]?.isTruthy &&
-              position !== 1
-            }
-          >
-            <FiCheckCircle /> Check
-          </Button>
+          {!formulas[position - 1]?.isChecked &&
+            !formulas[position - 1]?.isTruthy && (
+              <Button
+                type="submit"
+                className="check-button"
+                disabled={
+                  formulas.length > 1 &&
+                  !formulas[position - 2]?.isTruthy &&
+                  position !== 1
+                }
+              >
+                <FiCheckCircle /> Check
+              </Button>
+            )}
           {isLast && (
             <button
               type="button"
