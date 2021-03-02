@@ -5,5 +5,6 @@ const resolverRoutes = Router();
 const resolverController = new ResolverController();
 
 resolverRoutes.post('/', resolverController.store);
+resolverRoutes.delete('/:index', resolverController.destroy);
 
 export default resolverRoutes;
