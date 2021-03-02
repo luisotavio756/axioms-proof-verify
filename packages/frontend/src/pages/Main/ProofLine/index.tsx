@@ -107,6 +107,13 @@ const ProofLine: React.FC<IProofLineProps> = ({ position }) => {
           abortEarly: false,
         });
 
+        const regex = /\W/g;
+        const parsedFormula = data.formula.replace(/[\s^v()>¬-]/g, '');
+
+        if (regex.test(parsedFormula)) {
+          throw Error();
+        }
+
         const {
           formula,
           type,
