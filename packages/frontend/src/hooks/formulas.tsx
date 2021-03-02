@@ -43,11 +43,13 @@ const FormulasProvider: React.FC = ({ children }) => {
     });
   }, []);
 
-  const removeFormula = useCallback(() => {
+  const removeFormula = useCallback(async () => {
     setFormulas(state => {
       return state.filter(item => item.position !== state.length);
     });
-  }, []);
+
+    await api.delete(`/resolver/${formulas.length - 1}`);
+  }, [formulas.length]);
 
   const updateProof = useCallback(
     ({ position, isChecked, isTruthy }: IFormula) => {
