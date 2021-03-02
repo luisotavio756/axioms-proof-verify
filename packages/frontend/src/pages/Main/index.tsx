@@ -1,4 +1,11 @@
-import { FiMoon, FiPlus, FiSun, FiTrash } from 'react-icons/fi';
+import {
+  FiCheckCircle,
+  FiMoon,
+  FiPlus,
+  FiSun,
+  FiTrash,
+  FiXCircle,
+} from 'react-icons/fi';
 import { Title, Container } from './styles';
 import Button from '../../components/Button';
 import { useTheme } from '../../hooks/theme';
@@ -45,7 +52,14 @@ const Main: React.FC = () => {
             Disjunction: <span>v</span>
           </li>
         </ul>
-        <p>OBS: Please, use one tab space</p>
+        <p>OBS: Please, use one tab space after each atom, and form. Ex: </p>
+        <p className="correct">
+          <FiCheckCircle /> ((¬P ^ Q) {'->'} P) {'->'} (((¬P ^ Q) {'->'} ¬P){' '}
+          {'->'} ¬(¬P ^ Q))
+        </p>
+        <p className="incorrect">
+          <FiXCircle /> ((¬P ^ Q) {'->'}P), ((¬P ^ Q) {'->'}$)
+        </p>
       </div>
       <div className="formulas">
         {formulas.length > 0 &&

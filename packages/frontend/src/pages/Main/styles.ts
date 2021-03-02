@@ -31,6 +31,18 @@ export const Container = styled.div`
         color: ${({ theme }) => theme.text};
       }
     }
+
+    p.correct {
+      font-family: 'Fira Code';
+      font-weight: bold;
+      color: #8bb03e;
+    }
+
+    p.incorrect {
+      font-family: 'Fira Code';
+      font-weight: bold;
+      color: #f64e60;
+    }
   }
 
   .formulas {
