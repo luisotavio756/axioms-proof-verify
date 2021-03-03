@@ -49,7 +49,7 @@ You can enter in packages/server and run yarn dev:server or npm run dev:server t
 
 # Run Frontend
 $ yarn dev:client
-You can enter in packages/client and run yarn start or npm run start too
+You can enter in packages/frontend and run yarn start or npm run start too
 
 # Enjoy!
 ```
