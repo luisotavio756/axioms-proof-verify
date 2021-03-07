@@ -32,16 +32,18 @@ export const Container = styled.div`
       }
     }
 
-    p.correct {
+    button {
       font-family: 'Fira Code';
-      font-weight: bold;
+      font-size: 16px;
+      margin-top: 8px;
+      background: none;
       color: #8bb03e;
-    }
+      transition: all 0.2s;
+      border: none;
 
-    p.incorrect {
-      font-family: 'Fira Code';
-      font-weight: bold;
-      color: #f64e60;
+      &:hover {
+        color: ${shade('0.2', '#8bb03e')};
+      }
     }
   }
 

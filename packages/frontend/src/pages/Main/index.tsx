@@ -1,20 +1,16 @@
-import {
-  FiCheckCircle,
-  FiMoon,
-  FiPlus,
-  FiSun,
-  FiTrash,
-  FiXCircle,
-} from 'react-icons/fi';
+import { FiMoon, FiPlus, FiSun, FiTrash } from 'react-icons/fi';
+import { useState } from 'react';
 import { Title, Container } from './styles';
 import Button from '../../components/Button';
 import { useTheme } from '../../hooks/theme';
 import ProofLine from './ProofLine';
 import { useFormulas } from '../../hooks/formulas';
+import ModalInfo from '../../components/ModalInfo';
 
 const Main: React.FC = () => {
   const { toggleTheme, theme } = useTheme();
   const { formulas, clearFormulas, incrementFormulas } = useFormulas();
+  const [modalInfoIsOpen, setModalInfoIsOpen] = useState(false);
 
   return (
     <Container data-testid="container">
@@ -52,14 +48,9 @@ const Main: React.FC = () => {
             Disjunction: <span>v</span>
           </li>
         </ul>
-        <p>OBS: Please, use one tab space after each atom, and form. Ex: </p>
-        <p className="correct">
-          <FiCheckCircle /> ((¬P ^ Q) {'->'} P) {'->'} (((¬P ^ Q) {'->'} ¬P){' '}
-          {'->'} ¬(¬P ^ Q))
-        </p>
-        <p className="incorrect">
-          <FiXCircle /> ((¬P ^ Q) {'->'}P), ((¬P ^ Q) {'->'}$)
-        </p>
+        <button type="button" onClick={() => setModalInfoIsOpen(true)}>
+          {'->'} Click here to more infos
+        </button>
       </div>
       <div className="formulas">
         {formulas.length > 0 &&
@@ -79,6 +70,10 @@ const Main: React.FC = () => {
           <FiPlus /> Add Line
         </Button>
       </div>
+      <ModalInfo
+        isOpen={modalInfoIsOpen}
+        setIsOpen={() => setModalInfoIsOpen(false)}
+      />
     </Container>
   );
 };
