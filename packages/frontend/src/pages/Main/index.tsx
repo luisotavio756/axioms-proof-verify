@@ -35,6 +35,11 @@ const Main: React.FC = () => {
       <div className="description">
         <h4>Alphabetic:</h4>
         <ul>
+          <li>Atoms: A-Z, except the V.</li>
+          <li>
+            Use the <b>v</b> only like disjunctions, instead of a literal
+            alphabetic.
+          </li>
           <li>
             Implication: <span>{'->'}</span>
           </li>
