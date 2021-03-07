@@ -44,7 +44,11 @@ export default class CheckerService {
             utils.verifyFormulaWithAxiom({
               formula: parsedFormula,
               axiomType,
-              atoms,
+              atoms: {
+                p: atoms.p.toLowerCase(),
+                q: atoms.q.toLowerCase(),
+                r: atoms.r?.toLowerCase(),
+              },
             }) === true;
         }
 

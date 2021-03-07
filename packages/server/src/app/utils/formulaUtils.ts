@@ -38,12 +38,6 @@ export default {
     return formules;
   },
 
-  getParsedFormula(formula: string): string {
-    const parsedFormula = formula.replace(/[{()}]/g, '');
-
-    return parsedFormula;
-  },
-
   verifyFormulaWithAxiom({
     formula,
     atoms,
@@ -195,7 +189,8 @@ export default {
             (char === '>' && afterSplittedFormula[i - 1] === '-')) &&
           !(
             afterSplittedFormula[i + 1] === ' ' ||
-            /[A-Za-z]/g.test(afterSplittedFormula[i + 1])
+            /[A-Za-z]/g.test(afterSplittedFormula[i + 1]) ||
+            afterSplittedFormula[i + 1] === '('
           )
         ) {
           throw Error('');
