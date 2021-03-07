@@ -153,4 +153,109 @@ export default {
 
     return isValid;
   },
+
+  isValidFormula(formula: string): boolean {
+    const regex = /\W/g;
+    const parsedFormula = formula.replace(/[\s^v()>¬-]/g, '');
+
+    if (regex.test(parsedFormula)) {
+      return false;
+    }
+
+    const afterSplittedFormula = formula.split('');
+
+    try {
+      afterSplittedFormula.forEach((char, i) => {
+        if (
+          char === '(' &&
+          !(
+            afterSplittedFormula[i + 1] === ' ' ||
+            afterSplittedFormula[i + 1] === '(' ||
+            afterSplittedFormula[i + 1] === '¬' ||
+            afterSplittedFormula[i + 1] === ' ' ||
+            /[A-Za-z]/g.test(afterSplittedFormula[i + 1])
+          )
+        ) {
+          throw Error('');
+        } else if (
+          /[A-Za-z]/g.test(char) &&
+          afterSplittedFormula[i + 1] &&
+          !(
+            afterSplittedFormula[i + 1] === ' ' ||
+            afterSplittedFormula[i + 1] === ')' ||
+            afterSplittedFormula[i + 1] === 'v' ||
+            afterSplittedFormula[i + 1] === '^' ||
+            (afterSplittedFormula[i + 1] === '-' &&
+              afterSplittedFormula[i + 2] === '>')
+          )
+        ) {
+          throw Error('');
+        } else if (
+          (/[\^v¬]/g.test(char) ||
+            (char === '>' && afterSplittedFormula[i - 1] === '-')) &&
+          !(
+            afterSplittedFormula[i + 1] === ' ' ||
+            /[A-Za-z]/g.test(afterSplittedFormula[i + 1])
+          )
+        ) {
+          throw Error('');
+        } else if (
+          char === ' ' &&
+          !(
+            /[A-Za-z]/g.test(afterSplittedFormula[i + 1]) ||
+            /[\^v¬()]/g.test(afterSplittedFormula[i + 1]) ||
+            (afterSplittedFormula[i + 1] === '-' &&
+              afterSplittedFormula[i + 2] === '>')
+          )
+        ) {
+          throw Error('');
+        } else if (
+          (char === '-' && afterSplittedFormula[i + 1] !== '>') ||
+          (char === '>' && afterSplittedFormula[i - 1] !== '-')
+        ) {
+          throw Error('');
+        }
+      });
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  },
+
+  parseFormula(formula: string): string {
+    let parsedFormula = '';
+
+    const beforeSplitedFormula = formula.replace(/[\s]*/g, '').split('');
+
+    beforeSplitedFormula.forEach((char, i) => {
+      parsedFormula += char;
+
+      if (
+        /[A-Za-z]/g.test(char) &&
+        ((beforeSplitedFormula[i + 1] === '-' &&
+          beforeSplitedFormula[i + 2] === '>') ||
+          /[\^v¬]/g.test(beforeSplitedFormula[i + 1]))
+      ) {
+        parsedFormula += ' ';
+      } else if (
+        ((char === '>' && beforeSplitedFormula[i - 1] === '-') ||
+          char === '^' ||
+          char === 'v') &&
+        (/[A-Za-z¬]/g.test(beforeSplitedFormula[i + 1]) ||
+          beforeSplitedFormula[i + 1] === '(')
+      ) {
+        parsedFormula += ' ';
+      } else if (
+        char === ')' &&
+        ((beforeSplitedFormula[i + 1] === '-' &&
+          beforeSplitedFormula[i + 2] === '>') ||
+          /[\^v]/g.test(beforeSplitedFormula[i + 1]))
+      ) {
+        parsedFormula += ' ';
+      }
+    });
+
+    return parsedFormula;
+  },
 };

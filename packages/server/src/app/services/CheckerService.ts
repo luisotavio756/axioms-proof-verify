@@ -26,6 +26,15 @@ export default class CheckerService {
     axiomType,
     formulasToMP,
   }: IRequest): boolean {
+    const lowerCaseFormula = formula.toLowerCase();
+    const parsedFormula = utils.parseFormula(lowerCaseFormula);
+
+    const isValid = utils.isValidFormula(parsedFormula);
+
+    if (!isValid) {
+      throw new AppError('This formula have a bad format', 400);
+    }
+
     let isTruthy = false;
 
     switch (type) {
@@ -33,7 +42,7 @@ export default class CheckerService {
         if (atoms && axiomType) {
           isTruthy =
             utils.verifyFormulaWithAxiom({
-              formula,
+              formula: parsedFormula,
               axiomType,
               atoms,
             }) === true;
@@ -79,15 +88,13 @@ export default class CheckerService {
 
     const formulasList = this.formulasRepository.findAll();
 
-    const formulaIndex = formulasList.indexOf(formula);
+    const formulaIndex = formulasList.indexOf(parsedFormula);
 
     if (isTruthy && formulaIndex === -1) {
-      this.formulasRepository.create(formula);
+      this.formulasRepository.create(parsedFormula);
     } else if (isTruthy && formulaIndex > -1) {
-      this.formulasRepository.update(formulaIndex, formula);
+      this.formulasRepository.update(formulaIndex, parsedFormula);
     }
-
-    console.log(this.formulasRepository.findAll());
 
     return isTruthy;
   }
