@@ -182,7 +182,8 @@ const ProofLine: React.FC<IProofLineProps> = ({ position }) => {
 
         setMessage({
           type: 'error',
-          description: 'The proof is not valid !',
+          description:
+            error?.response?.data?.message || 'The proof is not valid !',
         });
 
         addToast({
